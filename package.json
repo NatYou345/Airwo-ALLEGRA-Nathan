@@ -17,7 +17,7 @@
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^8.3.1",
     "@heroicons/react": "^1.0.6",
     "@prisma/client": "^4.14.0",
     "@types/jsonwebtoken": "^9.0.2",
