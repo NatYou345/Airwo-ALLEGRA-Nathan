@@ -19,7 +19,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
     "@heroicons/react": "^2.0.18",
-    "@prisma/client": "^5.7.0",
+    "@prisma/client": "^5.7.1",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "20.10.5",
     "@types/react": "18.2.45",
