@@ -1,20 +1,22 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 import { useTheme } from "next-themes";
 import { BsFillMoonFill, BsSunFill } from "react-icons/bs";
 
 const Navbar = () => {
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() =>
+    typeof window === "undefined" ? null : localStorage.getItem("token")
+  );
+  const [user] = useState(() => {
+    if (typeof window === "undefined") return null;
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const router = useRouter();
   const { theme, setTheme } = useTheme();
-  const [themeLogo, setThemeLogo] = useState(null);
-
-  useEffect(() => {
-    setThemeLogo(theme === "dark" ? <BsSunFill /> : <BsFillMoonFill />);
-  }, [theme]);
+  const themeLogo = theme === "dark" ? <BsSunFill /> : <BsFillMoonFill />;
 
   const handleToogle = () => {
     if (theme === "dark") {
@@ -30,11 +32,6 @@ const Navbar = () => {
       setTheme("dark");
     }
   };
-
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-    setUser(JSON.parse(localStorage.getItem("user")));
-  }, []);
 
   const Logout = () => {
     toast.success("Successfully logging out", {
@@ -57,6 +54,7 @@ const Navbar = () => {
           onClick={handleToogle}
           className="p-1 text-slate-500 dark:text-yellow-400 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
         >
+          {themeLogo}
         </div>
         {token ? (
           <>
@@ -77,7 +75,7 @@ const Navbar = () => {
                   ></path>
                 </svg>
                 <span className="flex ml-2 text-slate-800 dark:text-slate-100 ">
-                  {user.name}
+                  {user?.name}
                 </span>
               </div>
             </Link>

@@ -15,7 +15,7 @@ model User {
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Place     Place[]
+  places    Place[]
 }
 
 model Place {
@@ -38,7 +38,7 @@ model Place {
 model City {
   id        Int      @id @default(autoincrement())
   name      String
-  Place     Place[]
+  places    Place[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

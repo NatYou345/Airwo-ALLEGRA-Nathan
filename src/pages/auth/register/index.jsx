@@ -10,15 +10,12 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
-    console.log(email, password, name);
     try {
       const res = await axios.post("/api/auth/register", {
         email,
@@ -27,14 +24,11 @@ export default function Register() {
       });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      if (res.status === 200) {
-        toast.success("Sign in successful");
-      }
-      router.push("/auth/login");
+      toast.success("Registration successful");
+      router.push("/");
     } catch (err) {
-      setError(err.response.data.error);
-      console.log(error);
-      toast.error("Something went wrong!");
+      const message = err.response?.data?.message ?? "Something went wrong";
+      toast.error(message);
       setLoading(false);
     }
   };
@@ -44,14 +38,14 @@ export default function Register() {
       <div className="flex-1 flex-grow">
         <Form
           label="Register"
-          handleClick={(e) => handleSubmit(e)}
+          handleClick={handleSubmit}
           name={name}
           setName={setName}
           email={email}
           setEmail={setEmail}
           password={password}
           setPassword={setPassword}
-          buttonLabel="Register"
+          buttonLabel={loading ? "Registering..." : "Register"}
         />
         <Link href="/auth/login" className="text-sm font-medium text-gray-500">
           {"Already have an account? Login"}

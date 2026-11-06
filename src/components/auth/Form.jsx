@@ -16,7 +16,7 @@ const Form = ({
   return (
     <>
       <h2 className="text-2xl font-bold mb-4">{label}</h2>
-      <form className="flex flex-col gap-4" data-bitwarden-watching="1">
+      <form className="flex flex-col gap-4" onSubmit={handleClick}>
         {(label === "Register") && (
           <Input
             label="Name"
@@ -51,7 +51,6 @@ const Form = ({
         <Button
           type="submit"
           label={buttonLabel}
-          onClick={(e) => handleClick(e)}
         />
       </form>
     </>

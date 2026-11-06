@@ -5,11 +5,18 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET");
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+
   const places = await prisma.place.findMany({
     include: {
       city: true,
-      host: true,
+      host: {
+        select: { id: true, name: true, email: true, avatar: true },
+      },
     },
   });
-  res.json(places);
+  return res.status(200).json(places);
 }
