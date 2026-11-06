@@ -2,15 +2,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Container from "../../components/Container";
 import Image from "next/image";
-import PropTypes from "prop-types";
 
-export default function Details({places}) {
-  const [loading, setLoading] = useState(false);
+export default function Details() {
   const router = useRouter();
-  const {id} = router.query;
+  const { id } = router.query;
   const [place, setPlace] = useState({});
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setLoading(true);
+    if (!id) return;
     fetch(`/api/places/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -18,6 +17,10 @@ export default function Details({places}) {
         setLoading(false);
       });
   }, [id]);
+
+  if (loading) {
+    return <Container className="p-4">Loading...</Container>;
+  }
 
   return (
     <Container className="flex min-h-[calc(100vh-100px)] flex-col max-w-7xl mx-auto px-4">
@@ -63,6 +66,3 @@ export default function Details({places}) {
     </Container>
   );
 }
-Details.propTypes = {
-  places: PropTypes.array,
-};

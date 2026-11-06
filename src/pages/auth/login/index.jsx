@@ -9,27 +9,22 @@ import { useRouter } from "next/router";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-      try {
-      const res = await axios.post("/api/auth/login", {
-        email,password,
-      });
+    setLoading(true);
+    try {
+      const res = await axios.post("/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      if (res.status === 200) {
-        toast.success("Login successful", {
-        });
-      }
+      toast.success("Login successful");
       router.push("/");
     } catch (err) {
-      setError(err.response.data.error);
-      console.log(error);
-      toast.error("Something went wrong!");
+      const message = err.response?.data?.message ?? "Something went wrong";
+      toast.error(message);
+      setLoading(false);
     }
   };
 
@@ -38,12 +33,12 @@ export default function Login() {
       <div className="flex-1 flex-grow">
         <Form
           label="Login"
-          handleClick={(e) => handleSubmit(e)}
+          handleClick={handleSubmit}
           email={email}
           setEmail={setEmail}
           password={password}
           setPassword={setPassword}
-          buttonLabel="Login"
+          buttonLabel={loading ? "Logging in..." : "Login"}
         />
         <Link
           href="/auth/register"
